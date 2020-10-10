@@ -1,28 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-// GET ALL CONTACTS
-router.get("/", (req, res) => {
+// GET ALL USERS
+router.get("/", async (req, res) => {
   // TODO
 });
 
-// GET SINGLE CONTACT
-router.get("/:contactId", (req, res) => {
+// GET SINGLE USER
+router.get("/:userId", async (req, res) => {
   // TODO
 });
 
-// POST CONTACT
+// POST USER
 router.post("/", (req, res) => {
   // TODO
 });
 
-// UPDATE CONTACT
-router.put("/:contactId", (req, res) => {
+// UPDATE USER
+router.put("/:userId", (req, res) => {
   // TODO
 });
 
-// DELETE CONTACT
-router.delete("/:contactId", (req, res) => {
+// DELETE USER
+router.delete("/:userId", (req, res) => {
   // TODO
 });
 

@@ -8,11 +8,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 
-mongoose.connect(process.env.CONNECTION_URI).then(() => {
-  const app = express();
+const app = express();
+app.use("/api", routes);
 
-  app.use("/api", routes);
-  app.listen(PORT, () => {
-    console.log("Server starts in port:", PORT);
-  });
-});
+module.exports = app;
