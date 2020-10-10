@@ -48,7 +48,6 @@ describe("GET /users/:userId", () => {
     const res = await request(app).get("/api/users/5f81b6382fab1742becf1675");
     expect(res.statusCode).toEqual(404);
     expect(res.body).toHaveProperty("message");
-    expect(res.body.user).toBe(null);
   });
 
   it("Get success user", async () => {
@@ -69,31 +68,37 @@ describe("GET /users/:userId", () => {
 
 describe("POST /users", () => {
   it("Post success user", async () => {
-    const newUser = new User({
+    const user = {
       name: "pepe",
       lastName: "Juan",
       email: "a@a.com",
       phoneNumber: "65456543546",
+    };
+    const res = await request(app).post("/api/users").type("form").send({
+      user,
     });
 
-    const res = await request(app).post("/api/users").send(newUser);
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty("user");
-    expect(res.body.user.email).toBe(newUser.email);
+    expect(res.body.user.email).toBe(user.email);
   });
 
   it("Post error same email", async () => {
-    const newUser = new User({
+    const user = {
       name: "pepe",
       lastName: "Juan",
       email: "a@a.com",
       phoneNumber: "65456543546",
-    });
+    };
 
-    const res = await request(app).post("/api/users").send(newUser);
-    expect(res.statusCode).toEqual(403);
+    await request(app).post("/api/users").type("form").send({ user });
+
+    const res = await request(app)
+      .post("/api/users")
+      .type("form")
+      .send({ user });
+    expect(res.statusCode).toEqual(503);
     expect(res.body).toHaveProperty("message");
-    expect(res.body.user.email).toBe(newUser.email);
   });
 });
 
@@ -117,5 +122,42 @@ describe("DELETE /users/:userId", () => {
     const res = await request(app).delete(`/api/users/${newUser._id}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty("message");
+  });
+});
+
+describe("UPDATE /users/:userId", () => {
+  it("User not found to update", async () => {
+    const user = {
+      name: "Pepe",
+      lastName: "Juan",
+      email: "a@a.com",
+      phoneNumber: "65456543546",
+    };
+    const res = await request(app)
+      .put("/api/users/5f81b6382fab1742becf1675")
+      .type("form")
+      .send({ user });
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  it("User update success", async () => {
+    const newUser = new User({
+      name: "pepe",
+      lastName: "Juan",
+      email: "a@a.com",
+      phoneNumber: "65456543546",
+    });
+    const userToUpdate = {
+      name: "Editado",
+    };
+    await newUser.save();
+    const res = await request(app)
+      .put(`/api/users/${newUser._id}`)
+      .type("form")
+      .send({ user: userToUpdate });
+    expect(res.statusCode).toEqual(201);
+    expect(res.body).toHaveProperty("user");
+    expect(res.body.user.name).toBe(userToUpdate.name);
   });
 });

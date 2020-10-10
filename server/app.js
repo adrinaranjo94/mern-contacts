@@ -1,14 +1,15 @@
-// DOTENV CONF
-const path = require("path");
-require("dotenv").config({ path: path.join(__dirname, "../.env") });
-
 const PORT = process.env.PORT || 5000;
-// END DOTENV CONF
+
 const express = require("express");
-const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const routes = require("./routes");
 
 const app = express();
+
+// Initialize bodyparser
+app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json();
+// Initialize router
 app.use("/api", routes);
 
 module.exports = app;
