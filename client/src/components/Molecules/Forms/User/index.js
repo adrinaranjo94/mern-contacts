@@ -101,7 +101,12 @@ const FormUser = (props) => {
                 color="primary"
                 disabled={!isValid || isSubmitting}
               >
-                Add user
+                {props.mode === "add"
+                  ? "Add"
+                  : props.mode === "edit"
+                  ? "Edit"
+                  : ""}{" "}
+                user
               </Button>
             </Grid>
           </Grid>
@@ -115,6 +120,7 @@ FormUser.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   data: PropTypes.object,
+  mode: PropTypes.string.isRequired,
 };
 
 export default FormUser;

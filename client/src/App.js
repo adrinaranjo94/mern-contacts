@@ -1,6 +1,6 @@
+import React from "react";
 import { UserPage } from "pages/User";
 import { UsersPage } from "pages/Users";
-import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 const App = () => {

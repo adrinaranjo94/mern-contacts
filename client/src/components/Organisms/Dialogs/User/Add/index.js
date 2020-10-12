@@ -14,6 +14,7 @@ const DialogAddUser = (props) => {
         onCancel={props.handlers?.onCancel}
         onSubmit={props.handlers?.onSubmit}
         data={props.data}
+        mode="add"
       />
     </DialogDefault>
   );
