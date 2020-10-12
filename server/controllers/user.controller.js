@@ -84,23 +84,42 @@ exports.updateUserById = async (req, res) => {
       const userDB = await User.findById(req.params.userId);
       if (userDB) {
         const { user } = req.body;
+        let emailExists = false;
 
-        delete user._id;
-        await User.findByIdAndUpdate(
-          req.params.userId,
-          { $set: { ...user } },
-          { new: true },
-          (err, result) => {
-            if (err) {
-              res.status(400);
-              res.send({ message: err });
+        if (user.email) {
+          const checkUserEmail = await User.findOne({ email: user.email });
+
+          if (checkUserEmail) {
+            if (checkUserEmail._id == req.params.userId) {
+              emailExists = false;
             } else {
-              res.status(201);
-              console.log("result", result);
-              res.send({ user: result });
+              emailExists = true;
             }
+          } else {
+            emailExists = false;
           }
-        );
+        }
+        console.log(emailExists);
+        if (!emailExists) {
+          delete user._id;
+          await User.findByIdAndUpdate(
+            req.params.userId,
+            { $set: { ...user } },
+            { new: true },
+            (err, result) => {
+              if (err) {
+                res.status(400);
+                res.send({ message: err });
+              } else {
+                res.status(201);
+                res.send({ user: result });
+              }
+            }
+          );
+        } else {
+          res.status(503);
+          res.send({ message: "email: The email address is already taken!" });
+        }
       } else {
         res.status(404);
         res.send({ message: "user not found" });
