@@ -160,4 +160,35 @@ describe("UPDATE /users/:userId", () => {
     expect(res.body).toHaveProperty("user");
     expect(res.body.user.name).toBe(userToUpdate.name);
   });
+
+  it("User update fails to update email taken", async () => {
+    const newUser = new User({
+      name: "pepe",
+      lastName: "Juan",
+      email: "a@a.com",
+      phoneNumber: "65456543546",
+    });
+
+    const newUser2 = new User({
+      name: "pepe",
+      lastName: "Juan",
+      email: "b@b.com",
+      phoneNumber: "65456543546",
+    });
+
+    await newUser.save();
+    await newUser2.save();
+
+    const userToUpdate = {
+      email: "a@a.com",
+    };
+
+    const res = await request(app)
+      .put(`/api/users/${newUser2._id}`)
+      .type("form")
+      .send({ user: userToUpdate });
+    expect(res.statusCode).toEqual(503);
+    console.log(res.body.message);
+    expect(res.body).toHaveProperty("message");
+  });
 });
