@@ -2,10 +2,13 @@ import { Grid, Grow, makeStyles, Typography } from "@material-ui/core";
 import FixedButton from "components/Atoms/FixedButton";
 import InputSearch from "components/Atoms/InputSearch";
 import { useAsyncState } from "components/core/AsyncState";
+import { SearchContainer } from "components/core/SearchContainer";
 import { SwitchStatus } from "components/core/SwitchStatus";
 import CardUserList from "components/Organisms/Cards/User/List";
 import DialogAddUser from "components/Organisms/Dialogs/User/Add";
 import DialogDeleteUser from "components/Organisms/Dialogs/User/Delete";
+import { EmptyTemplate } from "components/templates/Empty";
+import { NotFoundTemplate } from "components/templates/NotFound";
 import React, { useState } from "react";
 import UserServices from "services/user.services";
 
@@ -28,6 +31,11 @@ const useStyles = makeStyles(() => ({
     position: "absolute",
     bottom: "-20px",
   },
+  templateContainer: {
+    display: "flex",
+    width: "100%",
+    minHeight: "calc(100vh - 150px)",
+  },
 }));
 
 export const UsersPage = () => {
@@ -38,6 +46,7 @@ export const UsersPage = () => {
   const [openDialogAddUser, setOpenDialogAddUser] = useState(false);
   const [openDialogDeleteUser, setOpenDialogDeleteUser] = useState(false);
   const [userSelected, setUserSelected] = useAsyncState({});
+  const [search, setSearch] = useState("");
 
   // HANDLERS
   const handleToggleDialogAddUser = () => {
@@ -55,6 +64,10 @@ export const UsersPage = () => {
         handleToggleDialogDeleteUser();
       });
     }
+  };
+
+  const handleChangeSearchInput = (e) => {
+    setSearch(e.target.value);
   };
 
   const handleAddUser = async (values) => {
@@ -129,6 +142,7 @@ export const UsersPage = () => {
         <InputSearch
           classes={[classes.input]}
           disabled={status !== "success" ? true : false}
+          handlers={{ onChange: handleChangeSearchInput }}
         />
       </Grid>
       <Grid item xs={12} className={classes.content}>
@@ -140,20 +154,37 @@ export const UsersPage = () => {
           }}
           success={() => (
             <Grid container>
-              {users.map((user, index) => (
-                <Grow
-                  in={true}
-                  timeout={index === 0 ? 200 : (index + 1) * 200}
-                  key={`user-${user._id}`}
-                >
-                  <Grid item xs={12} md={6} lg={4}>
-                    <CardUserList
-                      data={user}
-                      handlers={{ onDelete: handleSelectUserToDelete }}
-                    />
-                  </Grid>
-                </Grow>
-              ))}
+              <SearchContainer
+                search={search}
+                options={users}
+                searchParams={["name", "lastName", "email"]}
+                template={(user, index) => {
+                  return (
+                    <Grow
+                      in={true}
+                      timeout={index === 0 ? 200 : (index + 1) * 200}
+                      key={`user-${user._id}`}
+                    >
+                      <Grid item xs={12} md={6} lg={4}>
+                        <CardUserList
+                          data={user}
+                          handlers={{ onDelete: handleSelectUserToDelete }}
+                        />
+                      </Grid>
+                    </Grow>
+                  );
+                }}
+                notFound={() => (
+                  <div className={classes.templateContainer}>
+                    <NotFoundTemplate search={search} />
+                  </div>
+                )}
+                empty={() => (
+                  <div className={classes.templateContainer}>
+                    <EmptyTemplate />
+                  </div>
+                )}
+              />
             </Grid>
           )}
         />

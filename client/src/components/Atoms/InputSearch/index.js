@@ -39,6 +39,7 @@ const InputSearch = (props) => {
         placeholder="Type to search user"
         className={classes.input}
         disabled={props.disabled}
+        onChange={props.handlers?.onChange}
       />
       <SearchIcon />
     </div>
@@ -52,6 +53,9 @@ InputSearch.defaultProps = {
 InputSearch.propTypes = {
   classes: PropTypes.array,
   disabled: PropTypes.bool,
+  handlers: PropTypes.shape({
+    onChange: PropTypes.func,
+  }),
 };
 
 export default InputSearch;

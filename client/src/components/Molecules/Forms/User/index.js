@@ -43,7 +43,8 @@ const FormUser = (props) => {
           setSubmitting(false);
         }
       }}
-      render={({ isValid, isSubmitting }) => (
+    >
+      {({ isValid, isSubmitting }) => (
         <Form>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -69,6 +70,7 @@ const FormUser = (props) => {
             <Grid item xs={12}>
               <Field
                 component={TextField}
+                type="email"
                 fullWidth
                 name="email"
                 label="Email"
@@ -112,7 +114,7 @@ const FormUser = (props) => {
           </Grid>
         </Form>
       )}
-    />
+    </Formik>
   );
 };
 

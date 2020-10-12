@@ -1,17 +1,9 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import React, { useState } from "react";
+import { Grid, makeStyles } from "@material-ui/core";
 import { useAsyncState } from "components/core/AsyncState";
 import { SwitchStatus } from "components/core/SwitchStatus";
-import FormUser from "components/Molecules/Forms/User";
-import React, { useState } from "react";
+import CardUserEdit from "components/Organisms/Cards/User/Edit";
+import CardUserView from "components/Organisms/Cards/User/View";
 import { Redirect, useHistory, useLocation, useParams } from "react-router-dom";
 import UserServices from "services/user.services";
 
@@ -20,26 +12,6 @@ const useStyles = makeStyles(() => ({
     minHeight: "100vh",
     justifyContent: "center",
     alignItems: "center",
-  },
-  headerContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    width: "80px",
-    height: "80px",
-    marginBottom: "12px",
-  },
-  divider: {
-    margin: "16px 0",
-  },
-  actionsContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  mr8: {
-    marginRight: "8px",
   },
 }));
 export const UserPage = (props) => {
@@ -97,69 +69,18 @@ export const UserPage = (props) => {
       case "view":
         return (
           <Grid xs={10}>
-            <Card>
-              <CardContent>
-                <Grid container>
-                  <Grid item xs={12} className={classes.headerContainer}>
-                    <Avatar className={classes.avatar}>{user.name[0]}</Avatar>
-                    <Typography variant="body1">
-                      {`${user.name} ${user.lastName}`}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} className={classes.divider}>
-                    <Divider />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1">Email: {user.email}</Typography>
-                    <Typography variant="body1">
-                      Phone Number: {user.phoneNumber}
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12} className={classes.divider}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12} className={classes.actionsContainer}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => {
-                      history.push("/users");
-                    }}
-                    className={classes.mr8}
-                  >
-                    Back to users
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      history.push("?action=edit");
-                    }}
-                    color="primary"
-                  >
-                    Edit user
-                  </Button>
-                </Grid>
-              </CardContent>
-            </Card>
+            <CardUserView user={user} history={history} />
           </Grid>
         );
 
       case "edit":
         return (
           <Grid item xs={10}>
-            <Card>
-              <CardContent>
-                <FormUser
-                  onCancel={() => {
-                    history.push("?action=view");
-                  }}
-                  onSubmit={handleEditUser}
-                  data={user}
-                  mode="edit"
-                />
-              </CardContent>
-            </Card>
+            <CardUserEdit
+              user={user}
+              history={history}
+              handlers={{ onSubmit: handleEditUser }}
+            />
           </Grid>
         );
       default:
