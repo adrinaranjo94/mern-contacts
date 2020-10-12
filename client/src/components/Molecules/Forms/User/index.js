@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Field, Form, Formik } from "formik";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 
@@ -19,7 +19,18 @@ const initialValues = {
   phoneNumber: "",
 };
 
+const useStyles = makeStyles(() => ({
+  actionsContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  mr8: {
+    marginRight: "8px",
+  },
+}));
+
 const FormUser = (props) => {
+  const classes = useStyles();
   return (
     <Formik
       initialValues={props.data || initialValues}
@@ -75,11 +86,12 @@ const FormUser = (props) => {
                 margin="normal"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} className={classes.actionsContainer}>
               <Button
                 variant="outlined"
                 color="secondary"
                 onClick={props.onCancel}
+                className={classes.mr8}
               >
                 Cancel
               </Button>
@@ -102,6 +114,7 @@ const FormUser = (props) => {
 FormUser.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
+  data: PropTypes.object,
 };
 
 export default FormUser;

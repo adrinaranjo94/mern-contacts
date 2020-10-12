@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CardUser = (props) => {
+const CardUserList = (props) => {
   const classes = useStyles();
   const { data, handlers } = props;
   return (
@@ -75,11 +75,12 @@ const CardUser = (props) => {
   );
 };
 
-CardUser.propTypes = {
+CardUserList.propTypes = {
   classes: PropTypes.array,
-  styles: PropTypes.object,
   data: PropTypes.object,
-  handlers: PropTypes.object,
+  handlers: PropTypes.shape({
+    onDelete: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-export default CardUser;
+export default CardUserList;

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import DialogDefault from "../Default";
+import DialogDefault from "../../Default";
 import FormUser from "components/Molecules/Forms/User";
 
 const DialogAddUser = (props) => {
@@ -17,6 +17,10 @@ const DialogAddUser = (props) => {
       />
     </DialogDefault>
   );
+};
+
+DialogAddUser.defaultProps = {
+  open: false,
 };
 
 DialogAddUser.propTypes = {
