@@ -1,0 +1,41 @@
+{
+  "name": "mern-contacts-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "setupFiles": [
+      "dotenv/config"
+    ]
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "debug": "1",
+      "version": "4.2.3"
+    }
+  },
+  "scripts": {
+    "start": "node -r dotenv/config index.js",
+    "dev": "nodemon -r dotenv/config index.js",
+    "test": "jest --runInBand"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "jest": "^26.5.2",
+    "mongodb-memory-server": "^6.9.2",
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
+  }
+}
